@@ -1,7 +1,7 @@
-# slurm_gpu_ubuntu
-Instructions for setting up a SLURM cluster using Ubuntu 18.04.3 with GPUs.  Go from a pile of hardware to a functional GPU cluster with job queueing and user management.
+# slurm on ubuntu
+Instructions for setting up a SLURM cluster using Ubuntu 20.04.1 with GPUs.  Go from a pile of hardware to a functional GPU cluster with job queueing and user management.
 
-OS used: Ubuntu 18.04.3 LTS
+OS used: Ubuntu 20.04.1 LTS
 
 
 # Overview
