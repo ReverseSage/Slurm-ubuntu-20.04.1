@@ -52,7 +52,9 @@ I recommend using [LVM](https://www.howtogeek.com/211937/how-to-use-lvm-on-ubunt
 first you need to make sure to disable the firewall (ufw) that will save you a lot of headache.  
 
 **(master-node)**  
-```sudo ufw disable```  
+```
+sudo ufw disable
+```  
 Now we will sync time on our cluster nodes.  
 you need `ntp` package
 ```
