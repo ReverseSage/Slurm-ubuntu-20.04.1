@@ -1,24 +1,30 @@
-# slurm on ubuntu
+# slurm on ubuntu (20.04.1)
 Instructions for setting up a SLURM cluster using Ubuntu 20.04.1 with GPUs.  Go from a pile of hardware to a functional GPU cluster with job queueing and user management.
 
 OS used: Ubuntu 20.04.1 LTS
 
 
 # Overview
-This guide will help you create and install a GPU HPC cluster with a job queue and user management.  The idea is to have a GPU cluster which allows use of a few GPUs by many people.  Using multiple GPUs at once is not the point here, and hasn't been tested.  This guide demonstrates how to create a GPU cluster for neural networks (deep learning) which uses Python and related neural network libraries (Tensorflow, Keras, Pytorch), CUDA, and NVIDIA GPU cards.  You can expect this to take you a few days up to a week.
+This guide will help you create and install a CPU/GPU HPC cluster with a job queue and user management.  The idea is to have a GPU cluster which allows use of a few GPUs by many people.  Using multiple GPUs at once is not the point here, and hasn't been tested.  This guide demonstrates how to create a GPU cluster for neural networks (deep learning) which uses Python and related neural network libraries (Tensorflow, Keras, Pytorch), CUDA, and NVIDIA GPU cards.  You can expect this to take you a few days up to a week.
 
 ## Outline of steps:
 
 - Prepare hardware
 - Install OSs
+- Cluster time synchronization 
 - Sync UID/GIDs or create slurm/munge users
+- Slurm installation (controller and slave daemon)
 - Install Software (Nvidia drivers, Anaconda and Python packages)
 - Install/configure file sharing (NFS here; if using more than one node/computer in the cluster)
 - Install munge/SLURM and configure
-- User management
 
 ## Acknowledgements
 This wouldn't have been possible without this [github repo](https://github.com/mknoxnv/ubuntu-slurm) from mknoxnv.  I don't know who that person is, but they saved me weeks of work trying to figure out all the conf files and services, etc.
+
+## Upcoming labels
+- master      = this section will apply on master node only.
+- node        = this section will apply on slave node only.
+- master-node = this section will apply on both master and slave.
 
 # Preparing Hardware
 
@@ -42,6 +48,29 @@ I recommend using [LVM](https://www.howtogeek.com/211937/how-to-use-lvm-on-ubunt
 
 **Note**: Along the way I used the package manager to update/upgade software many times (`sudo apt-get update` and `sudo apt-get upgrade`) followed by reboots.  If something is not working, this can be a first step to try to debug it.
 
+## Cluster time synchronization
+first you need to make sure to disable the firewall (ufw) that will save you a lot of headache.  
+
+**(master-node)**  
+```sudo ufw disable```  
+Now we will sync time on our cluster nodes.  
+you need `ntp` package
+```
+  sudo apt install ntp
+  sudo dpkg-reconfigure tzdata
+  
+```
+ a GUI will open then choose `UTC` timezone.
+ Next we need to add the following lines 
+ ```
+  server 127.127.1.0
+  fudge 127.127.1.0 stratum 10
+ ```
+  to the file `/etc/ntp.conf` then restart the service to apply.
+  ```
+  sudo /etc/init.d/ntp restart
+  ```
+**(node)**
 ## Synchronizing GID/UIDs
 It's recommend to sync the GIDs and UIDs across machines.  This can be done with something like LDAP (install instructions [here](https://computingforgeeks.com/how-to-install-and-configure-openldap-ubuntu-18-04/) and [here](https://www.techrepublic.com/article/how-to-install-openldap-on-ubuntu-18-04/)).  In my experience, for basic cluster management where all users can read and write to the folders where job files exist, the only GIDs and UIDs that need to be synced are the slurm and munge users.  Other users can be created and run SLURM jobs without having usernames on the other machines in the cluster.
 
