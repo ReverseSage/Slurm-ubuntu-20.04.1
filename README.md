@@ -32,7 +32,7 @@ If you do not already have hardware, here are some considerations:
 
 Top-of-the-line commodity motherboards can handle up to 4 GPUs.  You should pay attention to PCI Lanes in the motherboard and CPU specifications.  Usually GPUs can take up to 16 PCI Lanes, and work fastest for data transfer when using all 16 lanes.  To use 4 GPUs in one machine, your motherboard should support at least 64 PCI Lanes, and CPUs should have at least 64 Lanes available.  M.2 SSDs can use PCI lanes as well, so it can be better to have a little more than 64 Lanes if possible.  The motherboard and CPU specs usually detail the PCI lanes.
 
-We used NVIDIA GPU cards in our cluster, but many AMD cards [should now work](https://rocm.github.io/) with Python deep learning libraries now.
+We used NVIDIA GPU cards in our cluster, but many AMD cards [should now work]([https://rocm.github.io/](https://rocmdocs.amd.com/en/latest/)) with Python deep learning libraries now.
 
 Power supply wattage is also important to consider, as GPUs can take a lot of Watts at peak power.
 
